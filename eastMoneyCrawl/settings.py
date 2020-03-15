@@ -110,6 +110,22 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10"
 ]
 
+#使用scrapy_redis的调度器
+SCHEDULER = "yunqiCrawl.scrapy_redis.scheduler.Scheduler"
+SCHEDULER_QUEUE_CLASS = 'yunqiCrawl.scrapy_redis.queue.SpiderPriorityQueue'
+# 在redis中保持scrapy-redis用到的各个队列，从而允许暂停和暂停后恢复
+SCHEDULER_PERSIST = True
+
+#使用scrapy_redis的去重方式
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# DUPEFILTER_CLASS = "yunqiCrawl.bloomFilterOnRedis.bloomRedisFilter.bloomRedisFilter"
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+# 去重队列的信息
+FILTER_URL = None
+FILTER_HOST = 'localhost'
+FILTER_PORT = 6379
+FILTER_DB = 0
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -128,6 +144,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'eastMoneyCrawl.pipelines.EastmoneycrawlPipeline': None,
+	'scrapy_redis.pipelines.RedisPipeline':300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -155,6 +172,6 @@ AUTOTHROTTLE_MAX_DELAY = 60
 LOG_FILE = 'logfile.log'
 LOG_LEVEL = 'DEBUG'
 
-MONGO_URI = 'mongodb://localhost:27017'
-MONGO_DB = "fundInfo" 
-
+MONGO_URI = 'mongodb://localhost:27017,127.0.0.1:27018,127.0.0.1:27019'
+MONGO_DB = "fundInfo"
+REPLICASET = 'reset'
