@@ -172,6 +172,6 @@ AUTOTHROTTLE_MAX_DELAY = 60
 LOG_FILE = 'logfile.log'
 LOG_LEVEL = 'DEBUG'
 
-MONGO_URI = 'mongodb://localhost:27017,127.0.0.1:27018,127.0.0.1:27019'
-MONGO_DB = "fundInfo"
+MONGO_URI = 'mongodb://localhost:27017'
+MONGO_DB = "eastMoney"
 REPLICASET = 'reset'
