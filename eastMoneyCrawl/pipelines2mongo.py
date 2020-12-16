@@ -7,8 +7,8 @@
 
 import pymongo
 
-class EastmoneycrawlPipeline(object):
-	collection_name = 'fund_info'
+class pipelines2mongo(object):
+
 	def __init__(self, mongo_uri, mongo_db):
 			self.mongo_uri = mongo_uri
 			self.mongo_db = mongo_db
@@ -28,5 +28,13 @@ class EastmoneycrawlPipeline(object):
 			self.client.close()
 	
 	def process_item(self, item, spider):
-			self.db[self.collection_name].insert(dict(item))
+			if isinstance(item, company_info):
+				self.db['company_info'].update_one(dict(item), {'$set':dict(item)}, upsert=True)
+			elif isinstance(item, fund_info):
+				self.db['fund_info'].update_one(dict(item), {'$set':dict(item)}, upsert=True)
+			elif isinstance(item, fund_values):
+				values_d = dict(item)
+				fund_id = values_d['fund_id']
+				del values_d['fund_id']
+				self.db[fund_id].update_one(values_d, {'$set':values_d}, upsert=True)
 			return item
